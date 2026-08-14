@@ -1,10 +1,10 @@
 name: Auto Deploy to VPS Docker
 
-# Menentukan kapan pipeline ini berjalan
+# Menentukan kapan pipeline berjalan
 on:
   push:
     branches:
-      - main # Berjalan hanya ketika ada push ke branch main
+      - main
 
 jobs:
   deploy:
@@ -19,14 +19,16 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 22
 
-          # Skrip otomatisasi yang akan dijalankan di dalam VPS
+          # Skrip yang dijalankan di dalam VPS
           script: |
-            # Pergi ke folder proyek
-            # (asumsi folder sudah pernah di-clone sebelumnya)
+            # Masuk ke folder proyek
             cd /root/modul4-compose
-            
-            # Tarik kode terbaru
+
+            # Tarik kode terbaru dari GitHub
             git pull origin main
-            docker build -t 
+
+            # Build dan jalankan container
             docker compose up -d --build
+
+            # Bersihkan image Docker yang tidak digunakan
             docker image prune -f
